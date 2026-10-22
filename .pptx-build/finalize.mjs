@@ -1,0 +1,10 @@
+import path from 'node:path';
+import {pathToFileURL} from 'node:url';
+import {Presentation,PresentationFile} from '@oai/artifact-tool';
+const SKILL_DIR='/Users/deepan9477/.codex/plugins/cache/openai-primary-runtime/presentations/26.1020.11127/skills/presentations';
+const workspaceDir='/Users/deepan9477/Sky ramesh/SkyGaurd-AI-Platform';
+const candidatePath=path.join(workspaceDir,'.pptx-build/draft-innosphere.pptx');
+const FINAL_PPTX=path.join(workspaceDir,'.pptx-output/SkyGuard_InnoSphere_Presentation.pptx');
+const {finalizePresentation}=await import(pathToFileURL(path.join(SKILL_DIR,'container_tools/artifact_tool_utils.mjs')).href);
+const result=await finalizePresentation({workspaceDir,candidatePath,finalPath:FINAL_PPTX,pythonExecutable:'/Users/deepan9477/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3',integrityValidatorPath:path.join(SKILL_DIR,'container_tools/inspect_presentation_package_integrity.py'),layoutValidatorPath:path.join(SKILL_DIR,'container_tools/inspect_presentation_layout_geometry.py'),layoutArgs:['--expected-slide-size-emu','12192000,6858000','--validate-bullet-geometry','--validate-heading-fit'],fontPolicy:{basis:'design',families:['Aptos']},verifyArtifactToolImport:true,receiptPath:path.join(workspaceDir,'.pptx-build/validation-innosphere.json')});
+console.log(JSON.stringify(result));

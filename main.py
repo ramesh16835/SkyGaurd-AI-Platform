@@ -180,8 +180,10 @@ def diagnose_telemetry(payload: TelemetryWindowRequest):
 
     with torch.no_grad():
         recon_tensor = model(input_tensor)
-        # Residual error across the 3 physical parameters at current step (t=24)
-        param_mse = torch.mean((recon_tensor[:, -1, :3] - input_tensor[:, -1, :3]) ** 2).item()
+        # The configured threshold was calibrated for the full 24-hour window.
+        # Scoring only the final timestep makes normal readings at the edge of
+        # the sequence look anomalous much more often than the threshold allows.
+        param_mse = torch.mean((recon_tensor[:, :, :3] - input_tensor[:, :, :3]) ** 2).item()
 
     # 3. Physics & Statistical Signal Checks
     t_series = raw_arr[:, 0]
